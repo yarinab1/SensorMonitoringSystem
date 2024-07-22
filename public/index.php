@@ -4,9 +4,12 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Slim\Routing\RouteContext;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Psr7\Response as SlimResponse;
+// Load Controllers
+use controllers\SensorController;
+use controllers\SensorDataController;
+use controllers\ReportController;
 
 // Require autoload file
 require __DIR__ . '/../vendor/autoload.php';
@@ -55,10 +58,6 @@ $capsule->addConnection([
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
-// Load Controllers
-use App\Controllers\SensorController;
-use App\Controllers\SensorDataController;
-use App\Controllers\ReportController;
 
 $sensorController = new SensorController();
 $sensorDataController = new SensorDataController();
@@ -70,13 +69,14 @@ $app->post('/add-100-sensors', [$sensorController, 'add100Sensors']);
 $app->post('/add-sensor', [$sensorController, 'addSensor']);
 $app->post('/set-sensor-data/{id}', [$sensorDataController, 'setSensorData']);
 $app->get('/get-sensor-data', [$sensorDataController, 'getSensorData']);
-$app->get('/reports/hourly-averages', [$reportController, 'getHourlyAverages']);
-$app->get('/reports/malfunctioning-sensors', [$reportController, 'getMalfunctioningSensors']);
+$app->get('/hourly-averages', [$reportController, 'getHourlyAverages']);
+$app->get('/malfunctioning-sensors', [$reportController, 'getMalfunctioningSensors']);
 $app->delete('/delete-sensor/{id}', [$sensorController, 'deleteSensor']);
 
 $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function($req, $res) {
-    $handler = $this->notFoundHandler; // handle using the default Slim page not found handler
-    return $handler($req, $res);
+    $response = $res->withStatus(404);
+    $response->getBody()->write('Not Found');
+    return $response;
 });
 
 $app->run();

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace controllers;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Support\Facades\DB;
@@ -61,10 +61,8 @@ class SensorController
             ];
         }
 
-        // Use transaction to ensure atomicity
-        DB::transaction(function () use ($sensorsData) {
-            Capsule::table('sensors')->insert($sensorsData);
-        });
+        Capsule::table('sensors')->insert($sensorsData);
+
 
         $response->getBody()->write(json_encode(['message' => 'Sensors added successfully.']));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
@@ -95,13 +93,10 @@ class SensorController
         }
 
         try {
-            // Use transaction to ensure atomicity
-            DB::transaction(function () use ($face) {
-                Capsule::table('sensors')->insert([
-                    'face' => $face,
-                    'isOn' => false
-                ]);
-            });
+            Capsule::table('sensors')->insert([
+                'face' => $face,
+                'isOn' => false
+            ]);
 
             $response->getBody()->write(json_encode(['message' => 'Sensor added successfully.']));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(201);

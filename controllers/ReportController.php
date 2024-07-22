@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace controllers;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Psr\Http\Message\RequestInterface as Request;

@@ -55,7 +55,7 @@ function App() {
     setAggregatedHourly(true);
     try {
       const response = await fetch(
-        `http://localhost:3030/reports/hourly-averages`,
+        `http://localhost:3030/hourly-averages`,
         {
           method: "GET",
           headers: {
@@ -82,7 +82,7 @@ function App() {
     setMalfunctioningSensors(true);
     try {
       const response = await fetch(
-        `http://localhost:3030/reports/malfunctioning-sensors`,
+        `http://localhost:3030/malfunctioning-sensors`,
         {
           method: "GET",
           headers: {
