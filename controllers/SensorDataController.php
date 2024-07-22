@@ -37,4 +37,29 @@ class SensorDataController
         $response->getBody()->write($result->toJson());
         return $response->withHeader('Content-Type', 'application/json');
     }
+
+    public function setAllSensorsData(Request $request, Response $response)
+    {
+        $min = 0.0;
+        $max = 45.0;
+        $sensors = Capsule::table('sensors')->get();
+
+        foreach($sensors as $sensor) {
+            $randomTemperature = $min + mt_rand() / mt_getrandmax() * ($max - $min);
+            Capsule::table('sensor_data')->insert([
+                'timestamp' => date('Y-m-d H:i:s'),
+                'sensor_id' => $sensor->id,
+                'face' => $sensor->face,
+                'temperature' => $randomTemperature
+            ]);
+
+            Capsule::table('sensors')
+                ->where('id', $sensor->id)
+                ->update(['isOn' => true]);
+        }
+
+        $response->getBody()->write(json_encode(['message' => 'Sensors sets successfully.']));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+
+    }
 }

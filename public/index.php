@@ -68,6 +68,7 @@ $app->get('/sensors', [$sensorController, 'getAllSensors']);
 $app->post('/add-100-sensors', [$sensorController, 'add100Sensors']);
 $app->post('/add-sensor', [$sensorController, 'addSensor']);
 $app->post('/set-sensor-data/{id}', [$sensorDataController, 'setSensorData']);
+$app->post('/set-all-sensor-data', [$sensorDataController, 'setAllSensorsData']);
 $app->get('/get-sensor-data', [$sensorDataController, 'getSensorData']);
 $app->get('/hourly-averages', [$reportController, 'getHourlyAverages']);
 $app->get('/malfunctioning-sensors', [$reportController, 'getMalfunctioningSensors']);

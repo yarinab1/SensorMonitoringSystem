@@ -18,7 +18,7 @@ class ReportController
 
             if ($result->isEmpty()) {
                 $response->getBody()->write(json_encode(['message' => 'No hourly averages found.']));
-                return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+                return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
             }
 
             $response->getBody()->write($result->toJson());
@@ -39,7 +39,7 @@ class ReportController
 
             if ($result->isEmpty()) {
                 $response->getBody()->write(json_encode(['message' => 'No malfunctioning sensors found.']));
-                return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+                return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
             }
 
             $response->getBody()->write($result->toJson());
