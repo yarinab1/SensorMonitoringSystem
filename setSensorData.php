@@ -13,7 +13,7 @@ $capsule->addConnection([
     'password' => 'password',
     'charset' => 'utf8',
     'collation' => 'utf8_unicode_ci',
-    'prefix' => '', 
+    'prefix' => '',
 ]);
 
 $capsule->setAsGlobal();
@@ -37,6 +37,8 @@ function setSensorData () {
             ->where('id', $sensor->id)
             ->update(['isOn' => true]);
     }
+
+    echo "setSensorData completed.\n";
 }
 
 function aggregateHourlyData() {
@@ -47,8 +49,8 @@ function aggregateHourlyData() {
         $average = Capsule::table('sensor_data')
             ->where('face', $face)
             ->where('timestamp', '>=', $hour)
-            // ->where('timestamp', '<', date('Y-m-d H:i:s', strtotime($hour . ' +1 hour')))  //If it means exactly for 1 hour so uncomment the line but shoul wait for 1 hour that programm runs
             ->avg('temperature');
+
         if($average) {
             $facesInDb = Capsule::table('hourly_averages')->get();
             $flag = false;
@@ -70,9 +72,10 @@ function aggregateHourlyData() {
                     'average_temperature' => $average
                 ]);
             }
-            
         }
     }
+
+    echo "aggregateHourlyData completed.\n";
 }
 
 function detectMalfunctioningSensors() {
@@ -112,15 +115,13 @@ function detectMalfunctioningSensors() {
             }
         }
     }
+
+    echo "detectMalfunctioningSensors completed.\n";
 }
-
-
-
 
 while (true) {
     $start = microtime(true);
 
-    
     setSensorData();
     aggregateHourlyData();
     detectMalfunctioningSensors();
@@ -133,3 +134,4 @@ while (true) {
         usleep((1 - $elapsed) * 1000000);
     }
 }
+
